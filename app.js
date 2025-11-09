@@ -115,7 +115,10 @@ app.use((req, res, next) => {
   // console.log(req.cookies);
   next();
 });
-
+app.get('/test-log', (req, res) => {
+  console.info('----------测试 console.info 输出-----------'); // 访问该接口时会产生日志
+  res.send('日志已输出');
+});
 // 3) ROUTES
 app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
@@ -128,10 +131,5 @@ app.all('*', (req, res, next) => {
 });
 
 app.use(globalErrorHandler);
-
-app.get('/test-log', (req, res) => {
-  console.info('----------测试 console.info 输出-----------'); // 访问该接口时会产生日志
-  res.send('日志已输出');
-});
 
 module.exports = app;
