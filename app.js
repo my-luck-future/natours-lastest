@@ -129,4 +129,9 @@ app.all('*', (req, res, next) => {
 
 app.use(globalErrorHandler);
 
+app.get('/test-log', (req, res) => {
+  console.info('----------测试 console.info 输出-----------'); // 访问该接口时会产生日志
+  res.send('日志已输出');
+});
+
 module.exports = app;
