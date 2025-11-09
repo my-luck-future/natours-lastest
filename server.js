@@ -15,7 +15,15 @@ const DB = process.env.DATABASE.replace(
   process.env.DATABASE_PASSWORD
 );
 
-mongoose.connect(DB).then(() => console.log('DB connection successful!'));
+mongoose
+  .connect(DB, {
+    maxPoolSize: 5, // 减少连接池大小（Serverless 不适合大连接池）
+    serverSelectionTimeoutMS: 5000, // 缩短服务器选择超时（5秒）
+    socketTimeoutMS: 45000, // 延长 socket 超时（避免频繁断开）
+    // keepAlive: true, // 保持连接
+    keepAliveInitialDelay: 300000 // 5分钟发送一次心跳包
+  })
+  .then(() => console.log('DB connection successful!'));
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
