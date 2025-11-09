@@ -1,14 +1,35 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
+console.info('------enter pro-------');
 process.on('uncaughtException', err => {
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
   console.log(err.name, err.message);
   process.exit(1);
 });
 
-dotenv.config({ path: './config.env' });
+// dotenv.config({ path: './config.env' });
 const app = require('./app');
+
+const port = process.env.PORT || 3000;
+const server = app.listen(port, () => {
+  console.log(`App running on port ${port}...`);
+});
+
+process.on('unhandledRejection', err => {
+  console.log('UNHANDLED REJECTION! 💥 Shutting down...');
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+process.on('SIGTERM', () => {
+  console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
+  server.close(() => {
+    console.log('💥 Process terminated!');
+  });
+});
 
 const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
@@ -31,28 +52,3 @@ try {
   console.error('❌ MongoDB 连接失败:', e.message);
   throw err; // 抛出错误，供后续请求捕获
 }
-
-// 监听连接事件，输出状态
-// mongoose.connection.on('connected', () => console.log('MongoDB 已连接'));
-// mongoose.connection.on('error', err => console.error('连接错误:', err));
-// mongoose.connection.on('disconnected', () => console.log('MongoDB 已断开'));
-
-const port = process.env.PORT || 3000;
-const server = app.listen(port, () => {
-  console.log(`App running on port ${port}...`);
-});
-
-process.on('unhandledRejection', err => {
-  console.log('UNHANDLED REJECTION! 💥 Shutting down...');
-  console.log(err.name, err.message);
-  server.close(() => {
-    process.exit(1);
-  });
-});
-
-process.on('SIGTERM', () => {
-  console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
-  server.close(() => {
-    console.log('💥 Process terminated!');
-  });
-});
