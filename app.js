@@ -118,19 +118,20 @@ app.use((req, res, next) => {
 
 // 3) ROUTES
 // 等待数据库连接成功
-mongoose.connection.on('connected', () => {
-  console.log('MongoDB 连接成功');
-  // 连接成功后注册路由
-  app.use('/', viewRouter);
-  app.use('/api/v1/tours', tourRouter);
-  app.use('/api/v1/users', userRouter);
-  app.use('/api/v1/reviews', reviewRouter);
-  app.use('/api/v1/bookings', bookingRouter);
-});
+// mongoose.connection.on('connected', () => {
+//   console.log('MongoDB 连接成功');
+//   // 连接成功后注册路由
 
-mongoose.connection.on('error', err => {
-  console.error('MongoDB 连接失败:', err);
-});
+// });
+
+// mongoose.connection.on('error', err => {
+//   console.error('MongoDB 连接失败:', err);
+// });
+app.use('/', viewRouter);
+app.use('/api/v1/tours', tourRouter);
+app.use('/api/v1/users', userRouter);
+app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/bookings', bookingRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
