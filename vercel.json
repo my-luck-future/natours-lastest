@@ -1,0 +1,5 @@
+{
+  "build": {
+    "startCommand": "npm run start:prod"
+  }
+}

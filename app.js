@@ -117,29 +117,12 @@ app.use((req, res, next) => {
   // console.log(req.cookies);
   next();
 });
+
 app.get('/test-log', (req, res) => {
   console.info('----------测试 console.info 输出-----------'); // 访问该接口时会产生日志
-  try {
-    const DB = process.env.DATABASE.replace(
-      '<PASSWORD>',
-      process.env.DATABASE_PASSWORD
-    );
-
-    console.log('🔗 开始初始化 MongoDB 连接');
-    mongoose.connect(DB, {
-      maxPoolSize: 1,
-      serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
-      bufferTimeoutMS: 3000,
-      keepAliveInitialDelay: 300000
-    });
-    console.log('🎉 MongoDB 连接成功');
-  } catch (e) {
-    console.error('❌ MongoDB 连接失败:', e.message);
-    throw e; // 传播错误，阻止服务器启动
-  }
   res.send('连接mongodb');
 });
+
 // 3) ROUTES
 app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
