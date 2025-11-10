@@ -117,6 +117,8 @@ app.use((req, res, next) => {
 });
 app.get('/test-log', (req, res) => {
   console.info('----------测试 console.info 输出-----------'); // 访问该接口时会产生日志
+  console.log(process.env.DATABASE);
+  console.log(process.env.PORT);
   res.send('日志已输出');
 });
 // 3) ROUTES
