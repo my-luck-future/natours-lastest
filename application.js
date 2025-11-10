@@ -24,7 +24,6 @@ const viewRouter = require('./routes/viewRoutes');
 // Start express app
 const app = express();
 
-console.log('----node app.js------');
 // 正确配置 trust proxy（仅信任 1 层代理）
 app.set('trust proxy', 1);
 
