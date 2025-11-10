@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+// const dotenv = require('dotenv');
 
-console.info('------enter pro-------');
+process.stdout.write('------enter pro-------');
 process.on('uncaughtException', err => {
-  console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
-  console.log(err.name, err.message);
+  process.stdout.write('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+  process.stdout.write(err.name, err.message);
   process.exit(1);
 });
 
@@ -13,21 +13,21 @@ const app = require('./app');
 
 const port = process.env.PORT || 3000;
 // const server = app.listen(port, () => {
-//   console.log(`App running on port ${port}...`);
+//   process.stdout.write(`App running on port ${port}...`);
 // });
 
 process.on('unhandledRejection', err => {
-  console.log('UNHANDLED REJECTION! 💥 Shutting down...');
-  console.log(err.name, err.message);
+  process.stdout.write('UNHANDLED REJECTION! 💥 Shutting down...');
+  process.stdout.write(err.name, err.message);
   server.close(() => {
     process.exit(1);
   });
 });
 
 process.on('SIGTERM', () => {
-  console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
+  process.stdout.write('👋 SIGTERM RECEIVED. Shutting down gracefully');
   server.close(() => {
-    console.log('💥 Process terminated!');
+    process.stdout.write('💥 Process terminated!');
   });
 });
 
@@ -36,7 +36,7 @@ const DB = process.env.DATABASE.replace(
   process.env.DATABASE_PASSWORD
 );
 
-console.log('🔗 开始初始化 MongoDB 连接');
+process.stdout.write('🔗 开始初始化 MongoDB 连接');
 mongoose
   .connect(DB, {
     maxPoolSize: 1, // 减少连接池大小（Serverless 不适合大连接池）
@@ -47,13 +47,13 @@ mongoose
     keepAliveInitialDelay: 300000 // 5分钟发送一次心跳包
   })
   .then(() => {
-    console.log('🎉 MongoDB 连接成功');
+    process.stdout.write('🎉 MongoDB 连接成功');
     // 连接成功后再启动服务器
     server = app.listen(port, () => {
-      console.log(`App running on port ${port}...`);
+      process.stdout.write(`App running on port ${port}...`);
     });
   })
   .catch(err => {
-    console.error('❌ MongoDB 连接失败:', err);
+    process.stdout.write('❌ MongoDB 连接失败:', err);
     process.exit(1);
   });
