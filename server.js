@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 // });
 
 // dotenv.config({ path: './config.env' });
-const app = require('./app');
+const app = require('./application');
 
 // const port = process.env.PORT || 3000;
 // const server = app.listen(port, () => {

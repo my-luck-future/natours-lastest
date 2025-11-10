@@ -7,7 +7,7 @@
     "last 1 Firefox version"
   ],
   "scripts": {
-    "start": "node server.js",
+    "start": "NODE_ENV=production nodemon server.js",
     "dev": "nodemon server.js",
     "start:prod": "NODE_ENV=production nodemon server.js",
     "debug": "ndb server.js",
