@@ -1,5 +1,5 @@
 {
-  "build": {
-    "startCommand": "npm run start:prod"
+  "functions": {
+    "index.js": { "runtime": "nodejs22.0" }
   }
 }
