@@ -1,5 +1,5 @@
 {
   "functions": {
-    "index.js": { "runtime": "nodejs22.0" }
+    "index.js": { "runtime": "nodejs22.9.0" }
   }
 }
