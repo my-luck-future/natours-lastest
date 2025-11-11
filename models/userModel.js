@@ -80,9 +80,6 @@ userSchema.methods.correctPassword = async function(
   candidatePassword,
   userPassword
 ) {
-  console.info('password:', candidatePassword);
-  console.info('dbuserPassword:', userPassword);
-
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 

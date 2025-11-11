@@ -73,6 +73,7 @@ exports.logout = (req, res) => {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true
   });
+  console.log('logout res', res);
   res.status(200).json({ status: 'success' });
 };
 
@@ -94,6 +95,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
 
+  console.log('token: ', token);
   // 2) Verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
