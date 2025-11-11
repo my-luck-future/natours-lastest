@@ -81,7 +81,7 @@ exports.logout = (req, res) => {
   res.setHeader('Pragma', 'no-cache'); // 兼容 HTTP/1.0
   res.setHeader('Expires', '0'); // 标记为已过期
 
-  console.log('logout res', res);
+  // console.log('logout res', res);
   res.status(200).json({ status: 'success' });
 };
 
