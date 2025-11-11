@@ -56,7 +56,15 @@ app.use(
         'https://api.mapbox.com',
         'http://127.0.0.1:3000' // 开发环境
       ],
-      frameSrc: ['https://js.stripe.com']
+      frameSrc: ['https://js.stripe.com'],
+      connectSrc: [
+        "'self'",
+        'https://api.mapbox.com',
+        'https://events.mapbox.com'
+      ],
+      // 新增 worker-src，允许 blob: 和自身域名（根据实际需求调整）
+      workerSrc: ["'self'", 'blob:'],
+      imgSrc: ["'self'", 'data:', 'blob:'] // 新增 "blob:" 允许 blob 协议图片
     }
   })
 );
