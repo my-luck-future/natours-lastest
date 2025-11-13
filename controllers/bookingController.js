@@ -11,6 +11,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // console.log(tour);
 
   // 2) Create checkout session
+  // 创建一个结账会话（Checkout Session），用于生成 Stripe 预构建的支付页面 URL，引导用户完成支付。
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
     payment_method_types: ['card'],
@@ -33,12 +34,12 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
             images: [
               `${req.protocol}://${req.get('host')}/img/tours/${
                 tour.imageCover
-              }`
-            ]
-          }
-        }
-      }
-    ]
+              }`,
+            ],
+          },
+        },
+      },
+    ],
     // {
     //     name: `${tour.name} Tour`,
     //     description: tour.summary,
@@ -55,11 +56,11 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 3) Create session as response
   res.status(200).json({
     status: 'success',
-    session
+    session,
   });
 });
 
-const createBookingCheckout = async session => {
+const createBookingCheckout = async (session) => {
   const tour = session.client_reference_id;
   const user = (await User.findOne({ email: session.customer_email })).id;
   const price = session.amount_total / 100;
@@ -71,6 +72,7 @@ exports.webhookCheckout = (req, res, next) => {
 
   let event;
   try {
+    // 验证 Stripe 发送的 Webhook 事件的合法性（防止伪造请求），并解析出事件数据
     event = stripe.webhooks.constructEvent(
       req.body,
       signature,

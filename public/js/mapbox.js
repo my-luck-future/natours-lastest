@@ -1,8 +1,8 @@
 /* eslint-disable */
 export const displayMap = locations => {
   mapboxgl.accessToken =
-    'pk.eyJ1IjoidTJ1Z2wiLCJhIjoiY21lanh5bHkyMDA3bTJrcXI1dnJhaGhlciJ9.ntMR3xjp9_7JiwG_OEqeoQ';
-  // 'pk.eyJ1Ijoiam9uYXNzY2htZWR0bWFubiIsImEiOiJjam54ZmM5N3gwNjAzM3dtZDNxYTVlMnd2In0.ytpI7V7w7cyT1Kq5rT9Z1A';
+    // 'pk.eyJ1IjoidTJ1Z2wiLCJhIjoiY21lanh5bHkyMDA3bTJrcXI1dnJhaGhlciJ9.ntMR3xjp9_7JiwG_OEqeoQ';
+    'pk.eyJ1IjoidTJ1Z2wiLCJhIjoiY21odXRpYzdxMDNvZTJrcXJ5NG85bTBjayJ9.TE23NLnHi0Rejtk2rpT9cg';
 
   var map = new mapboxgl.Map({
     container: 'map',

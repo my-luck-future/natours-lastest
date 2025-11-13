@@ -1,5 +1,5 @@
 .cache
+.parcel-cache
 node_modules
-.cache
 *.env
 package-lock.json
