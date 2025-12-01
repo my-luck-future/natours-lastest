@@ -31,14 +31,26 @@ app.set('views', path.join(__dirname, 'views'));
 
 // 1) GLOBAL MIDDLEWARES
 // Implement CORS
-app.use(cors());
+const origin = process.env.FRONTEND_URL;
+app.use(
+  cors({
+    origin: origin, // 允许的前端域名
+    credentials: true, // 允许携带 Cookies
+  })
+);
 // Access-Control-Allow-Origin *
 // api.natours.com, front-end natours.com
 // app.use(cors({
 //   origin: 'https://www.natours.com'
 // }))
 
-app.options('*', cors());
+app.options(
+  '*',
+  cors({
+    origin: origin, // 允许的前端域名
+    credentials: true, // 允许携带 Cookies
+  })
+);
 // app.options('/api/v1/tours/:id', cors());
 
 // Serving static files
@@ -54,18 +66,18 @@ app.use(
         "'self'",
         'https://js.stripe.com',
         'https://api.mapbox.com',
-        'http://127.0.0.1:3000' // 开发环境
+        'http://127.0.0.1:3000', // 开发环境
       ],
       frameSrc: ['https://js.stripe.com'],
       connectSrc: [
         "'self'",
         'https://api.mapbox.com',
-        'https://events.mapbox.com'
+        'https://events.mapbox.com',
       ],
       // 新增 worker-src，允许 blob: 和自身域名（根据实际需求调整）
       workerSrc: ["'self'", 'blob:'],
-      imgSrc: ["'self'", 'data:', 'blob:'] // 新增 "blob:" 允许 blob 协议图片
-    }
+      imgSrc: ["'self'", 'data:', 'blob:'], // 新增 "blob:" 允许 blob 协议图片
+    },
   })
 );
 
@@ -79,7 +91,7 @@ const limiter = rateLimit({
   max: 100,
   windowMs: 60 * 60 * 1000,
   message: 'Too many requests from this IP, please try again in an hour!',
-  trustProxy: true
+  trustProxy: true,
 });
 app.use('/api', limiter);
 
@@ -110,8 +122,8 @@ app.use(
       'ratingsAverage',
       'maxGroupSize',
       'difficulty',
-      'price'
-    ]
+      'price',
+    ],
   })
 );
 

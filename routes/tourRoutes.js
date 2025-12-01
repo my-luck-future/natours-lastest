@@ -43,7 +43,15 @@ router
   );
 
 router
-  .route('/:id')
+  .route('/my-order-tours')
+  .get(authController.isLoggedIn, tourController.getMyTours);
+
+router
+  .route('/slug/:slug')
+  .get(authController.isLoggedIn, tourController.getTourBySlug);
+
+router
+  .route('/id/:id')
   .get(tourController.getTour)
   .patch(
     authController.protect,

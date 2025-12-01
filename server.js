@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const fs = require('fs');
+const https = require('https');
 
 dotenv.config({ path: './config.env' });
 const app = require('./application');
@@ -19,7 +21,7 @@ const connectDB = async () => {
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
       bufferTimeoutMS: 3000,
-      keepAliveInitialDelay: 300000
+      keepAliveInitialDelay: 300000,
     });
     console.log('🎉 MongoDB 连接成功');
   } catch (e) {
@@ -28,8 +30,33 @@ const connectDB = async () => {
   }
 };
 
+function getServer() {
+  const port = process.env.PORT || 3000;
+  if (process.env.NODE_ENV === 'development') {
+    // 读取自签名证书
+    const privateKey = fs.readFileSync(
+      'D:/remote-job/mkcert/127.0.0.1-key.pem',
+      'utf8'
+    );
+    const certificate = fs.readFileSync(
+      'D:/remote-job/mkcert/127.0.0.1.pem',
+      'utf8'
+    );
+    const credentials = { key: privateKey, cert: certificate };
+
+    // 设置 HTTPS 服务器
+    return https.createServer(credentials, app).listen(port, () => {
+      console.log(`App running on port ${port}...`);
+    });
+  } else {
+    return app.listen(port, () => {
+      console.log(`App running on port ${port}...`);
+    });
+  }
+}
+
 // 错误处理
-process.on('uncaughtException', err => {
+process.on('uncaughtException', (err) => {
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
   console.log(err.name, err.message);
   process.exit(1);
@@ -40,12 +67,9 @@ const startServer = async () => {
   try {
     await connectDB(); // 等待数据库连接成功
 
-    const port = process.env.PORT || 3000;
-    const server = app.listen(port, () => {
-      console.log(`App running on port ${port}...`);
-    });
+    const server = getServer();
 
-    process.on('unhandledRejection', err => {
+    process.on('unhandledRejection', (err) => {
       console.log('UNHANDLED REJECTION! 💥 Shutting down...');
       console.log(err.name, err.message);
       server.close(() => {
