@@ -5,6 +5,7 @@ const Booking = require('../models/bookingModel');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 
+const stripeReturnUrl = process.env.STRIPE_RETURN_URL;
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1) Get the currently booked tour
   const tour = await Tour.findById(req.params.tourId);
@@ -18,8 +19,10 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     // success_url: `${req.protocol}://${req.get('host')}/my-tours/?tour=${
     //   req.params.tourId
     // }&user=${req.user.id}&price=${tour.price}`,
-    success_url: `${req.protocol}://${req.get('host')}/my-tours?alert=booking`,
-    cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
+    // success_url: `${req.protocol}://${req.get('host')}/my-tours?alert=booking`,
+    // cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
+    success_url: `${stripeReturnUrl}/my-tours`,
+    cancel_url: `${stripeReturnUrl}/tour/${tour.slug}`,
     customer_email: req.user.email,
     client_reference_id: req.params.tourId,
     line_items: [
@@ -31,11 +34,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
           product_data: {
             name: `${tour.name} Tour`,
             description: tour.summary,
-            images: [
-              `${req.protocol}://${req.get('host')}/img/tours/${
-                tour.imageCover
-              }`,
-            ],
+            images: [`${stripeReturnUrl}/img/tours/${tour.imageCover}`],
           },
         },
       },
@@ -51,7 +50,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     //     quantity: 1
     //   }
   });
-  console.log(session);
+  // console.log(session);
 
   // 3) Create session as response
   res.status(200).json({

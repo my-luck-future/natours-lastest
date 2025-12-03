@@ -31,7 +31,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // 1) GLOBAL MIDDLEWARES
 // Implement CORS
-const origin = process.env.FRONTEND_URLS.split(',');
+const origin = process.env.CORS_FRONTEND_URLS.split(',');
 app.use(
   cors({
     origin: origin, // 允许的前端域名
