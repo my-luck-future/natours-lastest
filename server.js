@@ -1,4 +1,3 @@
-const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const fs = require('fs');
@@ -46,11 +45,11 @@ function getServer() {
 
     // 设置 HTTPS 服务器
     return https.createServer(credentials, app).listen(port, () => {
-      console.log(`App running on port ${port}...`);
+      console.log(`test env, App running on port ${port}...`);
     });
   } else {
     return app.listen(port, () => {
-      console.log(`App running on port ${port}...`);
+      console.log(`prod env, App running on port ${port}...`);
     });
   }
 }
