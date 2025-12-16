@@ -43,8 +43,8 @@ router
   );
 
 router
-  .route('/my-order-tours')
-  .get(authController.isLoggedIn, tourController.getMyTours);
+  .route('/my-tours')
+  .get(authController.protect, tourController.getMyTours);
 
 router
   .route('/slug/:slug')
