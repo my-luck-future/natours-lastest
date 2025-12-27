@@ -73,6 +73,8 @@ exports.logout = (req, res) => {
   res.cookie('jwt', 'loggedout', {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+    sameSite: 'None', // 必须设置为 'None' 以允许跨域请求携带 Cookie
   });
   // 禁用缓存，确保返回 200
   res.setHeader(
