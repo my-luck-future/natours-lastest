@@ -22,7 +22,7 @@ Built using modern technologies: node.js, express, mongoDB, mongoose and friends
 
 ## stripe 支付流程：
 
-- 用户点击 “购买” **→** 后端调用 stripe.checkout.sessions.create → 生成支付页面 URL → 用户跳转支付。
+- 用户点击 “购买” → 后端调用 stripe.checkout.sessions.create → 生成支付页面 URL → 用户跳转支付。
 
 - 用户支付成功 → Stripe 发送 checkout.session.completed 事件到你的 Webhook 地址。
 
@@ -48,7 +48,21 @@ Built using modern technologies: node.js, express, mongoDB, mongoose and friends
 -> routes/userRoutes.js 路由层接收/api/v1/users/login 路由  
 -> controllers/authController.js 控制层接收/校验 email&pwd  
 -> models/userModel.js 模型层通过 Email 查询用户数据  
--> controllers/authController.js 控制层校验用户密码准确性/返回 token  
+-> controllers/authController.js 控制层校验用户是否存在/密码准确性/返回 token  
 -> routes/userRoutes.js 路由层返回 token 给前端 login.js  
 -> public/js/login.js 若登陆成功，弹窗提示 login success  
--> 浏览器端重新渲染并生成 UI
+-> 浏览器端跳转到首页：重新渲染并生成 UI
+
+jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjOGExZGZhMmY4ZmI4MTRiNTZmYTE4MSIsImlhdCI6MTc2NjkyMTU0MiwiZXhwIjoxNzc0Njk3NTQyfQ.mU5w4DMJGeJwHDQt5pFqN19jGziQXVCcl7gAXm3TZYs
+
+- JWT 的核心组成
+  JWT 由三部分组成，用点 (.) 分隔：
+  Header（头部）: 包含 Token 的类型（typ，通常是 JWT）和签名算法（alg，如 HS256）。
+  Payload（载荷）: 包含声明（Claims），如用户 ID（sub）、颁发时间（iat）、过期时间（exp）等。这些信息用于识别用户和权限，但未加密，是 Base64 编码的，不应包含敏感信息。
+  Signature（签名）: 使用 Header、Payload 和一个密钥，通过指定算法生成，用于验证 Token 是否被篡改。
+- JWT 的工作流程
+  认证: 用户向服务器发送用户名和密码登录。
+  生成 Token: 服务器验证成功后，生成一个包含用户信息的 JWT，并用密钥签名后返回给客户端。
+  携带 Token: 客户端存储 Token（通常在本地存储或 Cookie），后续向服务器请求资源时，将 Token 放在请求头（Authorization）中。
+  验证: 服务器收到请求后，用同样的密钥验证 Token 的签名和是否过期。
+  响应: 验证通过，服务器信任该请求并返回资源；验证失败，返回错误（如 401 Unauthorized）。
